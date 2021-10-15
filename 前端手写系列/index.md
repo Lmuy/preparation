@@ -86,3 +86,41 @@ function createCurry(func, args) {
   };
 }
 ```
+
+## 4.手写防抖和节流
+
+**防抖**：高频事件触发时，只有等 n 秒内不再触发事件了，才执行函数，如果 n 秒内继续触发事件，那么就以新事件为准，等新的事件触发之后的 n 秒后才执行。
+
+```js
+function dobounce(func, delay) {
+  var timeout;
+
+  return function (e) {
+    clearTimeout(timeout);
+
+    var context = this;
+    var args = arguments;
+
+    timeout = setTimeout(function () {
+      func.apply(context, args);
+    }, delay);
+  };
+}
+```
+
+**节流**：高频事件触发时，不管触发多少次，每 n 秒执行一次。
+
+```js
+function throttle(func, delay) {
+  var flag = true;
+
+  return () => {
+    if (!flag) return;
+    flag = false;
+    timer = setTimeout(() => {
+      func();
+      flag = true;
+    }, delay);
+  };
+}
+```
