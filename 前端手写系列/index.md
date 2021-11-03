@@ -95,14 +95,11 @@ function createCurry(func, args) {
 function dobounce(func, delay) {
   var timeout;
 
-  return function (e) {
+  return () => {
     clearTimeout(timeout);
 
-    var context = this;
-    var args = arguments;
-
-    timeout = setTimeout(function () {
-      func.apply(context, args);
+    timeout = setTimeout(() => {
+      func();
     }, delay);
   };
 }
@@ -113,6 +110,7 @@ function dobounce(func, delay) {
 ```js
 function throttle(func, delay) {
   var flag = true;
+  var timer;
 
   return () => {
     if (!flag) return;
@@ -369,4 +367,34 @@ function _render(vnode) {
   vnode.children.forEach((child) => dom.appendChild(_render(child)));
   return dom;
 }
+```
+
+## 12.用递归实现函数 fill()
+
+```js
+要求：
+function fill (n, m) {
+  ...
+}
+
+console.log(fill(3,4)) // [4,4,4]
+```
+
+```js
+function fill(n, m) {
+  n--;
+  if (n) {
+    return [m].concat(fill(n, m));
+  } else {
+    return m;
+  }
+}
+```
+
+## 13.实现一个 Typescript 中的 Pick
+
+```ts
+type Pick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
 ```
