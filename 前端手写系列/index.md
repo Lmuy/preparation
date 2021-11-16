@@ -85,6 +85,10 @@ function createCurry(func, args) {
     return func.apply(this, args);
   };
 }
+
+function curry(fu, args) {
+  return fn.length <= args.length ? fn(...args) : curry.bind(null, fn, ...args);
+}
 ```
 
 ## 4.手写防抖和节流
