@@ -57,3 +57,25 @@ constructor(props) {
 - React 会去维护一个 isBatchingUpdates 标志，如果为 false 直接更新，如果是 true，那么会暂存状态进队列。
 - 且 setState 本身不是异步的，本身执行过程和代码是同步的，不会马上更新，因为合成事件和钩子函数在更新之前就运行了，导致没法马上拿到更新的值，所以形成了所谓的‘异步’，当然 setState 的第二个参数可以拿到更新之后的结果，或者接收函数调用，在函数调用里面可以拿到更新之后的结果。
 - 而且 React 的批量更新也有一定的规则，如果在合成事件或者钩子函数中，多次 setState 同一个属性会用最新的覆盖，如果多次 setState 不同的属性，会进行合并批量更新。
+
+## React Class 组件有哪些周期函数？分别有什么作用？
+
+## React Class 组件中请求可以在 componentWillMount 中发起吗？为什么？
+
+## React Class 组件和 React Hook 的区别有哪些？
+
+## React 中高阶函数和自定义 Hook 的优缺点？
+
+## 简要说明 React Hook 中 useState 和 useEffect 的运行原理？
+
+## React 如何发现重渲染、什么原因容易造成重渲染、如何避免重渲染？
+
+## React Hook 中 useEffect 有哪些参数，如何检测数组依赖项的变化？
+
+## React 的 useEffect 是如何监听数组依赖项的变化的？
+
+## React Hook 和闭包有什么关联关系？
+
+## React 中 useState 是如何做数据初始化的？
+
+## 列举你常用的 React 性能优化技巧？

@@ -29,3 +29,11 @@
 - 完成模块编译：经过上一步 Loader 翻译完所有模块之后，得到了模块翻译之后的内容以及模块之间的依赖。
 - 输出资源：根据入口与其它模块之间的依赖关系，组装成一个个包含多个模块的 Chunk，然后将 Chunk 转换为文件加载到输出列表，这不是改变输出内容的最后机会。
 - 输出完后：确定好输出内容之后，根据配置确定输出的路径和文件名，将输出内容写入文件系统。
+
+## webpack 动态加载原理
+
+[参考1](https://blog.csdn.net/qq_17175013/article/details/119350311)、[参考二](https://juejin.cn/post/6952703369135800350)
+
+## webpack 热更新原理
+
+大概流程是我们用webpack-dev-server启动一个服务之后，浏览器和服务端是通过websocket进行长连接，webpack内部实现的watch就会监听文件修改，只要有修改就webpack会重新打包编译到内存中，然后webpack-dev-server依赖中间件webpack-dev-middleware和webpack之间进行交互，每次热更新都会请求一个携带hash值的json文件和一个js，websocker传递的也是hash值，内部机制通过hash值检查进行热更新， 至于内部原理，因为水平限制，目前还看不懂。
