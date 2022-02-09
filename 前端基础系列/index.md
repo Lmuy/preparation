@@ -113,3 +113,162 @@ bar.call(window); // 2
 2. 将 this 绑定到这个对象；
 3. 执行构造函数中的代码（为这个新对象添加属性）；
 4. 若函数没有返回其他对象，则自动返回这个新对象；若函数有 return 返回的是非对象，则还是自动返回这个新对象，即覆盖那个非对象。
+
+## 装饰器 decorator
+
+### 1.类的装饰
+
+许多面向对象的语言都有装饰器(Decorator)函数，用来修改类的行为。
+
+```js
+@testable
+class MyClass {}
+
+function testable(target) {
+  target.isTestable = true;
+}
+
+MyClass.isTestable; // true
+```
+
+### 2.基本语法：
+
+```js
+@decorator
+class A {}
+
+// 等同于
+class A {}
+A = decorator(A) || A;
+```
+
+修饰器是一个对类进行处理的函数。注意，修饰器对类的行为的改变，是代码编译时发生的，而不是在运行时。这意味着，修饰器能在编译阶段运行代码。也就是说，修饰器本质就是编译时执行的函数。  
+**React 与 Redux 库结合使用时，常常需要写成下面这样**
+
+```js
+class MyConponent extends React.Conponent {}
+export default connect(mapStateToProps, mapDispatchToProps)(Mycomponent)
+
+// 可以通过装饰器，写成下面这样
+@connect(mapStateToProps, mapDispatchToPtops)
+export default class MyComponent extends React.Component {}
+```
+
+### 3.修饰类的方法
+
+修饰器不仅可以修饰类，还可以修饰类的属性。
+
+```js
+class Person {
+  @readonly
+  name() {
+    return `${this.name}`;
+  }
+}
+```
+
+## jsonp 原理及实现方法
+
+JSONP 是 JSON with Padding 的略称。它是一个非官方的协议，它允许在服务器端集成 Script tags 返回至客户端，通过 JavaScript callback 的形式实现跨域访问。
+
+```js
+// 实现方式
+// 例如：当前前端环境：localhost:8080     后端环境：localHost:8081
+// 前端调用后端地址
+<script type="text/javascript" src="http://localhost:8081/test.js"></script>
+```
+
+以上，可以成功访问到非同源的 server 地址。script 标签的 src 属性并不被同源策略所约束，所以可以获取任何服务器上的脚本并运行。
+
+### 实现模式--CallBack
+
+程序 A 中部分代码
+
+```js
+<script type="text/javascript">
+// 回调函数
+function callback(data) {
+    alert(data.message);
+}
+</script>
+<script type="text/javascript" src="http://localhost:20002/test.js"></script>
+```
+
+程序 B 中部分代码
+
+```js
+//调用callback函数，并以json数据形式作为阐述传递，完成回调
+
+callback({ message: "success" });
+```
+
+这其实就是 JSONP 的实现模式，或者说 JSONP 的原型：**创建一个回调函数，然后再远程服务上调用这个函数并且将 JSON 数据形式作为参数传递，完成回调。将 JSON 数据填充进回调函数**
+
+## promise 实例理解
+
+```js
+let p1 = new Promise((resolve, reject) => {
+  resolve("数据");
+});
+p1.then((res) => {
+  console.log(111, res);
+})
+  .then((res) => {
+    console.log(222, res);
+  })
+  .catch((err) => {
+    console.log(333, err);
+  });
+// 111 '数据'
+// 222 undefined
+let p1 = new Promise((resolve, reject) => {
+  reject("错误数据");
+});
+p1.then((res) => {
+  console.log(111, res);
+})
+  .then((res) => {
+    console.log(222, res);
+  })
+  .catch((err) => {
+    console.log(333, err);
+  });
+// 333 '错误数据'
+let p1 = new Promise((resolve, reject) => {
+  reject("错误数据");
+});
+p1.then((res) => {
+  console.log(111, res);
+})
+  .then((res) => {
+    console.log(222, res);
+  })
+  .catch((err) => {
+    console.log(333, err);
+  })
+  .then((res) => {
+    console.log(444, res);
+  });
+// '错误数据'
+// 444 undefined
+let p1 = new Promise((resolve, reject) => {
+  reject("错误数据");
+});
+p1.then((res) => {
+  console.log(111, res);
+})
+  .then((res) => {
+    console.log(222, res);
+  })
+  .catch((err) => {
+    console.log(333, err);
+  })
+  .then((res) => {
+    console.log(444, res);
+  })
+  .catch((err) => {
+    console.log(555, err);
+  });
+// 333 '错误数据'
+// 444 undefined
+```

@@ -32,8 +32,16 @@
 
 ## webpack 动态加载原理
 
-[参考1](https://blog.csdn.net/qq_17175013/article/details/119350311)、[参考二](https://juejin.cn/post/6952703369135800350)
+[参考 1](https://blog.csdn.net/qq_17175013/article/details/119350311)、[参考二](https://juejin.cn/post/6952703369135800350)
 
 ## webpack 热更新原理
 
-大概流程是我们用webpack-dev-server启动一个服务之后，浏览器和服务端是通过websocket进行长连接，webpack内部实现的watch就会监听文件修改，只要有修改就webpack会重新打包编译到内存中，然后webpack-dev-server依赖中间件webpack-dev-middleware和webpack之间进行交互，每次热更新都会请求一个携带hash值的json文件和一个js，websocker传递的也是hash值，内部机制通过hash值检查进行热更新， 至于内部原理，因为水平限制，目前还看不懂。
+大概流程是我们用 webpack-dev-server 启动一个服务之后，浏览器和服务端是通过 websocket 进行长连接，webpack 内部实现的 watch 就会监听文件修改，只要有修改就 webpack 会重新打包编译到内存中，然后 webpack-dev-server 依赖中间件 webpack-dev-middleware 和 webpack 之间进行交互，每次热更新都会请求一个携带 hash 值的 json 文件和一个 js，websocker 传递的也是 hash 值，内部机制通过 hash 值检查进行热更新， 至于内部原理，因为水平限制，目前还看不懂。
+
+## webpack 文件路径问题（path.join(\_\_dirname, 'index.js')）
+
+[参考一](https://blog.csdn.net/weixin_43972437/article/details/88378035)
+
+## webpack 4 和 5 的差别
+
+[参考一](https://www.imgeek.org/article/825357975)
