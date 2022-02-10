@@ -10,6 +10,8 @@
    当 flex 取值为 2 个数字时，相当于设置的 flex-grow 和 flex-shrink 值，flex-basis 取值为初始值，如 flex:1 0 时，等同于 flex: 1 0 0%。  
    当 flex 取值为 1 个数字和 1 个长度或百分比时，设置的是 flex-grow 和 flex-basis 的值，flex-shrink 值是初始值，如 flex:1 20%,等同于 flex: 1 1 20%。
 
+   [参考 flex 教程](https://www.ruanyifeng.com/blog/2015/07/flex-grammar.html)
+
 - ## 布局系列
 
 1. **css div 垂直水平居中，并完成 div 高度永远是宽度的一半**
