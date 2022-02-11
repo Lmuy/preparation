@@ -2,46 +2,97 @@
 
 ```js
 class MyPromise {
-  constructor(fn) {
-    this.resolvedCallbacks = [];
-    this.rejectedCallbacks = [];
-
-    this.state = "PENDING";
-    this.value = "";
-
-    fn(this.resolve.bind(this), this.reject.bind(this));
-  }
-
-  resolve(value) {
-    if (this.state === "PENDING") {
-      this.state = "RESOLVED";
-      this.value = value;
-
-      this.resolvedCallbacks.map((cb) => cb(value));
-    }
-  }
-
-  reject(value) {
-    if (this.state === "PENDING") {
-      this.state = "REHECTED";
-      this.value = value;
-
-      this.rejectedCallbacks.map((vb) => vb(value));
-    }
+  constructor(executor) {
+    this.executor = excutor;
+    this.value = null;
+    this.status = "pending";
+    this.onFullfiledFunctions = [];
+    this.onRejectedFunctions = [];
+    const resolve = (value) => {
+      if (this.status === "pending") {
+        this.value = value;
+        this.status = "fullfilled";
+        this.onFulfilledFunctions.forEach((onFulFilled) => {
+          onFulfilled();
+        });
+      }
+    };
+    const reject = (value) => {
+      if (this.status === "pending") {
+        this.value = value;
+        this.status = "rejected";
+        this.onRejectedFunctions.forEach((onRejected) => {
+          onRejected();
+        });
+      }
+    };
+    this.executor = excutor;
   }
 
   then(onFulfilled, onRejected) {
-    if (this.state === "PENDING") {
-      this.resolvedCallbacks.push(onFilfilled);
-      this.rejectedCallbacks.push(onRejected);
+    const self = this;
+    if (typeof onFulfilled !== "function") {
+      // 兼容onFulfilled未传函数情况
+      onFulfilled = function () {};
     }
-
-    if (this.state === "RESOLVED") {
-      onFulfilled(this.value);
+    if (typeof onRejected !== "function") {
+      // 兼容onFulfilled未传函数情况
+      onRejected = function () {};
     }
-
-    if (this.state === "REJECTED") {
-      onRejected(this.value);
+    if (this.status === "pending") {
+      return new MyPromise((resolve, reject) => {
+        this.onFulfilledFunctions.push(() => {
+          try {
+            const thenReturn = onFulfilled(self.value);
+            if (thenReturn instanceof MyPromise) {
+              thenReturn.then(resolve, reject);
+            } else {
+              resolve(thenReturn);
+            }
+          } catch (err) {
+            // catch执行过程中的错误
+            reject(err);
+          }
+        });
+      });
+      this.onRejectedFunctions.push(() => {
+        try {
+          const thenReturn = onRejected(self.value);
+          if (thenReturn instanceof MyPromise) {
+            thenReturn.then(resolve, reject);
+          } else {
+            resolve(thenReturn);
+          }
+        } catch (err) {
+          reject(err);
+        }
+      });
+    } else if (this.status === "fulfiiled") {
+      return new MyPromise((resolve, reject) => {
+        try {
+          const thenReturn = onFulfilled(self.value);
+          if (thenReturn instanceof MyPromise) {
+            thenReturn.then(resolve, reject);
+          } else {
+            resolve(thenReturn);
+          }
+        } catch (err) {
+          reject(err);
+        }
+      });
+    } else {
+      return new MyPromise((resolve, reject) => {
+        try {
+          const thenReturn = onRejected(self.value);
+          if (thenReturn instanceof MyPromise) {
+            thenReturn.then(resolve, reject);
+          } else {
+            resolve(thenReturn);
+          }
+        } catch (err) {
+          reject(err);
+        }
+      });
     }
   }
 }
@@ -464,4 +515,31 @@ function fill(n, m) {
 type Pick<T, K extends keyof T> = {
   [P in K]: T[P];
 };
+```
+
+## 14.手写实现 Map
+
+```js
+let obj = {
+  name: "ceshi",
+  age: "18",
+};
+Object.prototype.myMap = function (fn) {
+  var keys = Object.keys(this);
+  var that = this;
+  var newObj = {};
+  keys.forEach(function (key, index) {
+    newObj[key] = fn(that(key), key);
+  });
+  return newObj;
+};
+// 使用
+var newObj = obj.myMap(function (vlue, key) {
+  return value + "1";
+});
+console.log(newObj);
+// newObj = {
+//   name: 'ceshi1',
+//   age: '181'
+// }
 ```
