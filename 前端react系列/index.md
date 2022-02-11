@@ -64,6 +64,8 @@ constructor(props) {
 
 ## React Class 组件和 React Hook 的区别有哪些？
 
+react hooks 实现了函数组件内部数据的动态更新。
+
 ## React 中高阶函数和自定义 Hook 的优缺点？
 
 ## 简要说明 React Hook 中 useState 和 useEffect 的运行原理？

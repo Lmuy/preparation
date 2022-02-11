@@ -163,7 +163,52 @@ function myNew(fn, ...args) {
 
 ## 6.手写 call、apply、bind
 
+## context[fn] = this 理解
+
+context[fn] = this; 这句话的个人理解
+这个函数里面 context 是当你使用 myCall 的 this 指向对象
+当你使用上面方法之后相当于在这个指向对象里面新增了一个 key 为 fn，value 为函数的 this 的键值对（this 的指向问题，当你使用 myCall 的时候，this 是调用 myCall 的函数，即上面的 fun.fn，即最终是在 context 里面新增了一个 fn：fun.fn）
+context[fn](...arr);当你执行这行代码的时候 其实是调用了 fun.fn，但是这个时候 里面的 this 的指向变为调用 fn 的 context
+就这样 context 中的 this 就完成代替了 fun.fn 中的 this。用代码来表示：
+
 ```js
+let test = {
+  name: "test",
+};
+let fun = {
+  fn: function () {
+    console.log(this.name);
+  },
+};
+fun.fn.myCall(test);
+
+// 其实就是test变为了如下形式：
+// let test = {
+//   name: 'test',
+//   fn: function() {
+//     console.log(this.name)
+//   }
+// }
+// 所以最后要删除test.fn。
+// delete context[fn]; // 删除上下文对象的属性
+```
+
+```js
+// 实例
+let obj = {
+  name: 1,
+  say: function () {
+    console.log(this.name);
+  },
+};
+let a = {
+  name: 2,
+};
+var name = 3;
+obj.say(); // 1
+obj.say.call(a); // 2
+obj.say.call(window); // 3
+
 Function.prototype.myCall = function (context, ...args) {
   if (!context || context === null) {
     context = window;
