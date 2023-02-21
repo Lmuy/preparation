@@ -12,7 +12,7 @@ class MyPromise {
       if (this.status === "pending") {
         this.value = value;
         this.status = "fullfilled";
-        this.onFulfilledFunctions.forEach((onFulFilled) => {
+        this.onFullfiledFunctions.forEach((onFulFilled) => {
           onFulfilled();
         });
       }
@@ -542,4 +542,26 @@ console.log(newObj);
 //   name: 'ceshi1',
 //   age: '181'
 // }
+```
+
+## 15.实现一个批量请求函数，并能够控制并发量
+```
+let mapLimit = (list, limit, asyncHandle) => {
+    let recursion = (arr) => {
+        return asyncHandle(arr.shift()).then(()=>{
+                if (arr.length!==0) return recursion(arr)   // 数组还未迭代完，递归继续进行迭代
+                else return 'finish';
+            })
+    };
+
+    let listCopy = [].concat(list);
+    let asyncList = []; // 正在进行的所有并发异步操作
+    while(limit--) {
+        asyncList.push( recursion(listCopy) ); 
+    }
+    return Promise.all(asyncList);  // 所有并发异步操作都完成后，本次并发控制迭代完成
+}
+
+// 使用
+
 ```
